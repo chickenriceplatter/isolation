@@ -1,18 +1,26 @@
-module Isolation; class CommandRunner
+module Isolation;
 
-  attr_reader :command
-  attr_accessor :success_status, :error_message
-  alias_method :success?, :success_status
+  class CommandRunner
 
-  def initialize(command)
-    @command = command
-  end
+    attr_reader :command
+    attr_accessor :success_status, :error_message
+    alias_method :success?, :success_status
 
-  def run
-    Open3.popen3(ENV, command) do |stdin, stdout, stderr, wait_thr|
-      self.success_status = wait_thr.value.success?
-      self.error_message = stderr.read
+    def initialize(command)
+      @command = command
     end
+
+    def run
+      Open3.popen3(ENV, command) do |stdin, stdout, stderr, wait_thr|
+        self.success_status = wait_thr.value.success?
+        self.error_message = stderr.read
+      end
+    end
+
   end
 
-end; end
+  def self.run(command)
+    CommandRunner.new(command).tap {|cr| cr.run }
+  end
+
+end

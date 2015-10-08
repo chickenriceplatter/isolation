@@ -5,15 +5,11 @@ A ruby gem to run command-line commands in isolation and capture error messages.
 ## Usage
 
 ```ruby
-runner = Isolation::CommandRunner.new("echo hello")
-runner.run
-
+runner = Isolation.run("echo hello")
 runner.success? # true
 runner.error_message # "" (empty string)
 
-runner2 = Isolation::CommandRunner.new("ls -z")
-runner2.run
-
+runner2 = Isolation.run("ls -z")
 runner2.success? # false
 runner2.error_message # ls: illegal option -- z\nusage: ls [-ABCFGHLOPRSTUWabcdefghiklmnopqrstuwx1] [file ...]\n
 ```
